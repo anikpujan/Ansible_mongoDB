@@ -1,0 +1,22 @@
+---
+- name: Install mongodb
+  hosts: localhost
+  gather_facts: false
+  become: yes
+  tasks:
+    - name: Add gpg key
+      shell: curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add - 
+    - name: Add  key
+      shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
+      # update_cache: yes
+    - name: Install mongodb
+      apt: 
+        name: mongodb-org
+        state: present
+        update_cache: yes
+    - name: Enable and start grafana service
+      systemd:
+        name: mongod
+        enabled: yes
+        state: started
+      # become: yes
