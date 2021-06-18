@@ -2,14 +2,15 @@
 - name: Install mongodb
   hosts: localhost
   gather_facts: false
-  become: yes
+  become: yes ###If you use this do not have to specify multiple times as seen in the commented statements below but they work as well if you comment this statement
   tasks:
     - name: Add gpg key
       shell: curl -fsSL https://www.mongodb.org/static/pgp/server-4.4.asc | sudo apt-key add - 
     - name: Add  key
       shell: echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu focal/mongodb-org/4.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.4.list
-      # update_cache: yes
+      # update_cache: yes ### IF you use this command then it will fail and would not exucute following blocks
     - name: Install mongodb
+#       become: yes
       apt: 
         name: mongodb-org
         state: present
@@ -19,4 +20,4 @@
         name: mongod
         enabled: yes
         state: started
-      # become: yes
+#       become: yes
